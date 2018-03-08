@@ -43,7 +43,15 @@ if [[ $(uname) == Darwin ]]; then
   # AVFoundation.h looks like it needs at least 10.7
   # furthermore, we need at least 10.9 to be able to build with libc++ and avoid the dreaded
   # "strvararg.h:25:14: fatal error: 'type_traits' file not found" build error
-  sed -i -e s/"--enable-mediactrl"/"--enable-mediactrl --with-macosx-version-min=10.9"/g buildtools/build_wxwidgets.py
+
+  # This is done using a patch now
+  # sed -i -e s/"--enable-mediactrl"/"--enable-mediactrl --with-macosx-version-min=10.9"/g buildtools/build_wxwidgets.py
+
+  # Apparently waf build system creates the object files for all targets first
+  # and then creates the shared libs and doesn't honour CXXFLAGS during the
+  # linking stage, which leads to linking libstdc++ instead of libc++
+  export LDFLAGS="$LDFLAGS -stdlib=libc++"
+
   # build documentation, etg and sip files before the real build starts
   # required for sip wrappings to be generated
   # we would only need this if it's a checkout, but we're using a snapshot which includes generated files
@@ -52,6 +60,14 @@ if [[ $(uname) == Darwin ]]; then
   $PYTHON setup.py install --single-version-externally-managed --record record.txt  >> $BUILD_OUTPUT 2>&1
 elif [[ $(uname) == Linux ]]; then
   export CPPFLAGS="${CPPFLAGS} -I${PREFIX}/include/GL -I${PREFIX}/include"
+
+  # The configure script doesn't use --rpath-link :/
+  if [[ ${ARCH} == 32 ]]; then
+    export LD_LIBRARY_PATH="${BUILD_PREFIX}/${HOST}/sysroot/usr/lib"
+  else
+    export LD_LIBRARY_PATH="${BUILD_PREFIX}/${HOST}/sysroot/usr/lib64"
+  fi
+
   $PYTHON build.py build_wx install_wx --gtk2 --no_magic --prefix=$PREFIX --jobs=$CPU_COUNT >> $BUILD_OUTPUT 2>&1
   $PYTHON build.py build_py install_py --gtk2 --no_magic --prefix=$PREFIX --jobs=$CPU_COUNT >> $BUILD_OUTPUT 2>&1
 fi
