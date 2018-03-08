@@ -1,30 +1,65 @@
-{% set version = "4.0.0rc1.dev3440+0f9b36e" %}
+{% set name = "wxPython" %}
+{% set version = "4.0.1" %}
 
 package:
-  name: wxpython
+  name: {{ name|lower }}
   version: {{ version }}
 
 source:
   fn: wxpython-{{ version }}.tar.gz
-  url: https://wxpython.org/Phoenix/snapshot-builds/wxPython-{{ version }}.tar.gz
-  sha1: ae67fe9ec6124e42f18bef4a0a01a1d527e4ca2f
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: f8f2ac1a75368b9b103259addc77f4e3dfe729c6d70aa1fd0b7e9c5b6075c710
   patches:
     - build.py.patch  # make sure windows builds dont try to use msgfmt
+    - 0001-MacOSX-Use-libc-not-libstdc.patch
+    - 0002-MacOSX-Specify-correct-SDK-path-and-version.patch
 
 build:
   number: 0
   osx_is_app: True  # [osx]
-  skip: True  # [osx] cannot build within travis build time limit
   script: python setup.py install --single-version-externally-managed --record record.txt  # [win]
 
 requirements:
   build:
+    - pkg-config                         # [unix]
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ cdt('gtk2-devel') }}            # [linux]
+    - {{ cdt('libpng-devel') }}          # [linux]
+    - {{ cdt('libxrender-devel') }}      # [linux]
+    - {{ cdt('mesa-libgl-devel') }}      # [linux]
+    - {{ cdt('mesa-dri-drivers') }}      # [linux]
+    - {{ cdt('libXxf86vm-devel') }}      # [linux]
+    - {{ cdt('libselinux') }}            # [linux]
+    - {{ cdt('libdrm-devel') }}          # [linux]
+    - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
+    - {{ cdt('libxau-devel') }}          # [linux]
+    - {{ cdt('libx11-devel') }}          # [linux]
+    - {{ cdt('libxfixes-devel') }}       # [linux]
+    - {{ cdt('libxext-devel') }}         # [linux]
+    - {{ cdt('libxinerama') }}           # [linux]
+    - {{ cdt('libxi') }}                 # [linux]
+    - {{ cdt('libxcursor') }}            # [linux]
+    - {{ cdt('libxcomposite') }}         # [linux]
+    - {{ cdt('libxdamage-devel') }}      # [linux]
+    - {{ cdt('webkitgtk-devel') }}       # [linux]
+    - {{ cdt('libsoup-devel') }}         # [linux]
+  host:
     - python
-    - toolchain
+    - pthread-stubs
     - setuptools
+    - glib              # [linux]
+    - xz                # [unix]
+    - expat             # [unix]
+    - zlib              # [unix]
+    - cairo             # [linux]
+    - jpeg              # [unix]
+    - pango             # [linux]
+    - libpng            # [unix]
+    - libxml2           # [linux]
+    - libiconv          # [osx]
     - gstreamer  # [linux]
     - gst-plugins-base  # [linux]
-    - mesa  # [linux]
     - libglu  # [linux]
     - backports.lzma  # [osx]
     - requests
@@ -35,16 +70,20 @@ requirements:
     - six
     - gstreamer  # [linux]
     - gst-plugins-base  # [linux]
-    - mesa  # [linux]
     - libglu  # [linux]
     - backports.lzma  # [osx]
+    # pango doesn't have a run_exports yet
+    - {{ pin_compatible('pango') }}  # [linux]
+    # Run exports should take care of rest
 
 test:
+  # Commenting out since we don't use CDT pkgs during tests
+  # Till we have a fix, the package maintainer will test this manually
   imports:
-    - wx
-  commands:
-    - conda inspect linkages -p $PREFIX wxpython  # [not win]
-    - conda inspect objects -p $PREFIX wxpython  # [osx]
+    - wx  # [not linux]
+  #commands:
+  #  - conda inspect linkages -p $PREFIX wxpython  # [not win]
+  #  - conda inspect objects -p $PREFIX wxpython  # [osx]
 
 about:
   home: https://wxpython.org/Phoenix/
