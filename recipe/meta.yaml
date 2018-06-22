@@ -1,5 +1,5 @@
 {% set name = "wxPython" %}
-{% set version = "4.0.1" %}
+{% set version = "4.0.2" %}
 
 package:
   name: {{ name|lower }}
@@ -8,17 +8,20 @@ package:
 source:
   fn: wxpython-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: f8f2ac1a75368b9b103259addc77f4e3dfe729c6d70aa1fd0b7e9c5b6075c710
+  sha256: aff394a664186a639d7db962e72fab9c8826713c84bfcdea2b578280d0b47425
   patches:
     - build.py.patch  # make sure windows builds dont try to use msgfmt
     - 0001-MacOSX-Use-libc-not-libstdc.patch
     - 0002-MacOSX-Specify-correct-SDK-path-and-version.patch
     - 0003-Don-t-enable-debug-info-for-all-builds.patch
+    - 0004-Use-custom-function-for-python_header-checking-on-Da.patch
 
 build:
   number: 1
   osx_is_app: True  # [osx]
   script: python setup.py install --single-version-externally-managed --record record.txt  # [win]
+  missing_dso_whitelist:                                           # [osx]
+    - /System/Library/Frameworks/QTKit.framework/Versions/A/QTKit  # [osx]
 
 requirements:
   build:
@@ -40,6 +43,7 @@ requirements:
     - {{ cdt('libxext-devel') }}         # [linux]
     - {{ cdt('libxinerama') }}           # [linux]
     - {{ cdt('libxi') }}                 # [linux]
+    - {{ cdt('libxcb') }}                # [linux]
     - {{ cdt('libxcursor') }}            # [linux]
     - {{ cdt('libxcomposite') }}         # [linux]
     - {{ cdt('libxdamage-devel') }}      # [linux]
