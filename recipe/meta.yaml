@@ -1,5 +1,5 @@
 {% set name = "wxPython" %}
-{% set version = "4.0.2" %}
+{% set version = "4.0.3" %}
 
 package:
   name: {{ name|lower }}
@@ -8,7 +8,7 @@ package:
 source:
   fn: wxpython-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: aff394a664186a639d7db962e72fab9c8826713c84bfcdea2b578280d0b47425
+  sha256: 8d0dfc0146c24749ce00d575e35cc2826372e809d5bc4a57bde6c89031b59e75
   patches:
     - build.py.patch  # make sure windows builds dont try to use msgfmt
     - 0001-MacOSX-Use-libc-not-libstdc.patch
@@ -17,7 +17,7 @@ source:
     - 0004-Use-custom-function-for-python_header-checking-on-Da.patch
 
 build:
-  number: 1
+  number: 0
   osx_is_app: True  # [osx]
   script: python setup.py install --single-version-externally-managed --record record.txt  # [win]
   missing_dso_whitelist:                                           # [osx]
