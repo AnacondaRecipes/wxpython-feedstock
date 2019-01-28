@@ -1,5 +1,5 @@
 {% set name = "wxPython" %}
-{% set version = "4.0.3" %}
+{% set version = "4.0.4" %}
 
 package:
   name: {{ name|lower }}
@@ -8,13 +8,14 @@ package:
 source:
   fn: wxpython-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 8d0dfc0146c24749ce00d575e35cc2826372e809d5bc4a57bde6c89031b59e75
+  sha256: 0d9ef4260cb2f3e23ed9dcf6baa905ba585ac7d631613cddc299c4c83463ae29
   patches:
     - build.py.patch  # make sure windows builds dont try to use msgfmt
     - 0001-MacOSX-Use-libc-not-libstdc.patch
     - 0002-MacOSX-Specify-correct-SDK-path-and-version.patch
     - 0003-Don-t-enable-debug-info-for-all-builds.patch
     - 0004-Use-custom-function-for-python_header-checking-on-Da.patch
+    - 0005-Anaconda-Distribution-uses-14.1-for-3.6-too.patch
 
 build:
   number: 0

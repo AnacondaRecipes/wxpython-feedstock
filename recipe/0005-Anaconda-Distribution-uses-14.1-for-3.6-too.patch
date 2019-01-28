@@ -1,0 +1,25 @@
+From 6f4735215ba05f0076eeb6898cf7ab61b2d21199 Mon Sep 17 00:00:00 2001
+From: Nehal J Wani <nehaljw.kkd1@gmail.com>
+Date: Sun, 20 Jan 2019 02:11:48 -0600
+Subject: [PATCH 5/5] Anaconda Distribution uses 14.1 for 3.6 too
+
+---
+ wscript | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/wscript b/wscript
+index a50904d1..3303d43d 100644
+--- a/wscript
++++ b/wscript
+@@ -73,7 +73,7 @@ def configure(conf):
+         # Visual Studio 2017. However, waf is using "msvc 15.0" to designate
+         # that version rather than "14.1" so we'll need to catch that case and
+         # fix up the msvc_version accordingly.
+-        if msvc_version == "14.1" and sys.version_info >= (3,7):
++        if msvc_version == "14.1" and sys.version_info >= (3,6):
+             ##msvc_version = '15.0'
+ 
+             # On the other hand, microsoft says that v141 and v140 (Visual
+-- 
+2.19.1
+
