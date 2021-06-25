@@ -2,6 +2,15 @@
 
 set -e # Abort on error.
 
+# TEST 6/25/2021
+#pushd build-aux
+# rm config.guess
+# curl -o config.guess ‘https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD’
+# rm config.sub
+# curl -o config.sub ‘https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD’
+#popd
+
+
 export PING_SLEEP=30s
 export WORKDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export BUILD_OUTPUT=$WORKDIR/build.out
@@ -68,8 +77,24 @@ elif [[ $(uname) == Linux ]]; then
     export LD_LIBRARY_PATH="${BUILD_PREFIX}/${HOST}/sysroot/usr/lib64"
   fi
 
+  # TEST 6/26/2021
+  export build_alias="aarch64-unknown-linux-gnu"
+  export host_alias="aarch64-unknown-linux-gnu"
+
+  # TEST 6/25/2021
+  #pushd build-aux
+  #  rm config.guess
+  #  curl -o config.guess ‘https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD’
+  #  rm config.sub
+  #  curl -o config.sub ‘https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD’
+  #popd
+
   $PYTHON build.py build_wx install_wx --gtk2 --no_magic --prefix=$PREFIX --jobs=$CPU_COUNT >> $BUILD_OUTPUT 2>&1
+  #$PYTHON build.py build_wx install_wx --gtk3 --no_magic --prefix=$PREFIX --jobs=$CPU_COUNT >> $BUILD_OUTPUT 2>&1
+
   $PYTHON build.py build_py install_py --gtk2 --no_magic --prefix=$PREFIX --jobs=$CPU_COUNT >> $BUILD_OUTPUT 2>&1
+  #$PYTHON build.py build_py install_py --gtk3 --no_magic --prefix=$PREFIX --jobs=$CPU_COUNT >> $BUILD_OUTPUT 2>&1
+
 fi
 
 ## END BUILD

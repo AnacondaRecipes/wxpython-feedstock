@@ -48,8 +48,12 @@ requirements:
     - {{ cdt('libxcursor') }}            # [linux]
     - {{ cdt('libxcomposite') }}         # [linux]
     - {{ cdt('libxdamage-devel') }}      # [linux]
-    - {{ cdt('webkitgtk-devel') }}       # [linux]
+    - {{ cdt('webkitgtk-devel') }}       # [linux and not aarch64]
     - {{ cdt('libsoup-devel') }}         # [linux]
+    - {{ cdt('webkitgtk3-devel') }}      # [linux and aarch64]
+    - {{ cdt('hunspell-en-us') }}        # [linux and aarch64]
+    - {{ cdt('hunspell') }}              # [linux and aarch64]
+    - make                               # [linux and aarch64]
   host:
     - python
     - pthread-stubs
