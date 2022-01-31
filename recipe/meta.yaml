@@ -50,6 +50,8 @@ requirements:
     - {{ cdt('libxdamage-devel') }}      # [linux]
     - {{ cdt('webkitgtk-devel') }}       # [linux]
     - {{ cdt('libsoup-devel') }}         # [linux]
+    - patch     # [not win]
+    - m2-patch  # [win]
   host:
     - python
     - pthread-stubs
