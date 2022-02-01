@@ -27,6 +27,8 @@ build:
 requirements:
   build:
     - pkg-config                         # [unix]
+    - patch                              # [unix]
+    - m2-patch                           # [win]
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - {{ cdt('gtk2-devel') }}            # [linux]
