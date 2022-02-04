@@ -25,6 +25,7 @@ build:
     - $RPATH/libm.so.6           # [linux]
     - $RPATH/libc.so.6           # [linux]
     - /System/Library/Frameworks/QTKit.framework/Versions/A/QTKit  # [osx]
+  skip: True  # [linux and (ppc64le or aarch64 or s390x)]
 
 requirements:
   build:
