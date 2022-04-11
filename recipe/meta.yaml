@@ -21,8 +21,11 @@ build:
   number: 0
   osx_is_app: True  # [osx]
   script: python setup.py install --single-version-externally-managed --record record.txt  # [win]
-  missing_dso_whitelist:                                           # [osx]
+  missing_dso_whitelist:
+    - $RPATH/libm.so.6           # [linux]
+    - $RPATH/libc.so.6           # [linux]
     - /System/Library/Frameworks/QTKit.framework/Versions/A/QTKit  # [osx]
+  skip: True  # [ppc64le or aarch64 or s390x]
 
 requirements:
   build:
