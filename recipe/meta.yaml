@@ -1,5 +1,5 @@
 {% set name = "wxPython" %}
-{% set version = "4.0.4" %}
+{% set version = "4.1.1" %}
 
 package:
   name: {{ name|lower }}
@@ -8,7 +8,7 @@ package:
 source:
   fn: wxpython-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 0d9ef4260cb2f3e23ed9dcf6baa905ba585ac7d631613cddc299c4c83463ae29
+  sha256: 00e5e3180ac7f2852f342ad341d57c44e7e4326de0b550b9a5c4a8361b6c3528
   patches:
     - build.py.patch  # make sure windows builds dont try to use msgfmt
     - 0001-MacOSX-Use-libc-not-libstdc.patch
@@ -21,12 +21,17 @@ build:
   number: 0
   osx_is_app: True  # [osx]
   script: python setup.py install --single-version-externally-managed --record record.txt  # [win]
-  missing_dso_whitelist:                                           # [osx]
+  missing_dso_whitelist:
+    - $RPATH/libm.so.6           # [linux]
+    - $RPATH/libc.so.6           # [linux]
     - /System/Library/Frameworks/QTKit.framework/Versions/A/QTKit  # [osx]
+  skip: True  # [ppc64le or aarch64 or s390x]
 
 requirements:
   build:
     - pkg-config                         # [unix]
+    - patch                              # [unix]
+    - m2-patch                           # [win]
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - {{ cdt('gtk2-devel') }}            # [linux]
@@ -36,6 +41,8 @@ requirements:
     - {{ cdt('mesa-dri-drivers') }}      # [linux]
     - {{ cdt('libXxf86vm-devel') }}      # [linux]
     - {{ cdt('libselinux') }}            # [linux]
+    - {{ cdt('libsm-devel') }}           # [linux]
+    - {{ cdt('libice-devel') }}          # [linux]
     - {{ cdt('libdrm-devel') }}          # [linux]
     - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
     - {{ cdt('libxau-devel') }}          # [linux]
@@ -66,12 +73,12 @@ requirements:
     - libpng            # [unix]
     - libxml2           # [linux]
     - libiconv          # [osx]
-    - gstreamer  # [linux]
+    - gstreamer         # [linux]
     - gst-plugins-base  # [linux]
-    - libglu  # [linux]
-    - backports.lzma  # [osx]
+    - libglu            # [linux]
+    - backports.lzma    # [osx]
     - requests
-    - gettext  # [not win]
+    - gettext           # [not win]
   run:
     - python
     - python.app  # [osx]
