@@ -68,12 +68,12 @@ requirements:
     - libpng            # [unix]
     - libxml2           # [linux]
     - libiconv          # [osx]
-    - gstreamer  # [linux]
+    - gstreamer         # [linux]
     - gst-plugins-base  # [linux]
-    - libglu  # [linux]
-    - backports.lzma  # [osx]
+    - libglu            # [linux]
+    - backports.lzma    # [osx]
     - requests
-    - gettext  # [not win]
+    - gettext           # [not win]
   run:
     - python
     - python.app  # [osx]
