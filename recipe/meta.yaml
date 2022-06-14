@@ -18,7 +18,7 @@ source:
     - 0005-Anaconda-Distribution-uses-14.1-for-3.6-too.patch
 
 build:
-  number: 0
+  number: 1
   osx_is_app: True  # [osx]
   script: python setup.py install --single-version-externally-managed --record record.txt  # [win]
   missing_dso_whitelist:                                           # [osx]
