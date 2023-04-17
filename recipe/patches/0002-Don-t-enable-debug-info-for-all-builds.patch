@@ -1,0 +1,32 @@
+From e337d96aff0e63fd5f48fb83465a3c50b32d6b76 Mon Sep 17 00:00:00 2001
+From: Marek Waszkiewicz <mwaszkiewicz@anaconda.com>
+Date: Mon, 17 Apr 2023 16:23:37 +0200
+Subject: [PATCH 2/3] Don't enable debug info for all builds
+
+---
+ wscript | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/wscript b/wscript
+index 2eea2600..1a7d2596 100644
+--- a/wscript
++++ b/wscript
+@@ -326,12 +326,11 @@ def configure(conf):
+         conf.env.CFLAGS_WXPY.append('-DSIP_MODULE_BASENAME=siplib')
+         conf.env.CXXFLAGS_WXPY.append('-DSIP_MODULE_BASENAME=siplib')
+ 
+-        # Add basic debug info for all builds
+-        conf.env.CFLAGS_WXPY.append('-g')
+-        conf.env.CXXFLAGS_WXPY.append('-g')
+-
+         # And if --debug is set turn on more detailed debug info and turn off optimization
+         if conf.env.debug:
++            conf.env.CFLAGS_WXPY.append('-g')
++            conf.env.CXXFLAGS_WXPY.append('-g')
++
+             for flags in [conf.env.CFLAGS_PYEXT, conf.env.CXXFLAGS_PYEXT]:
+                 flags.extend(['-ggdb', '-O0'])
+ 
+-- 
+2.25.1
+
