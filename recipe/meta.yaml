@@ -17,6 +17,7 @@ source:
 build:
   number: 0
   osx_is_app: True  # [osx]
+  skip: true  # [py>=311 or s390x or aarch64 or ppc64le or osx-64 or osx-arm64 ] https://bugzilla.redhat.com/show_bug.cgi?id=2062145
   script: python setup.py install --single-version-externally-managed --record record.txt  # [win]
   missing_dso_whitelist:                                           # [osx]
     - /System/Library/Frameworks/QTKit.framework/Versions/A/QTKit  # [osx]
@@ -83,6 +84,7 @@ requirements:
     # pango doesn't have a run_exports yet
     - {{ pin_compatible('pango') }}  # [linux]
     # Run exports should take care of rest
+    - fontconfig
 
 test:
   # Commenting out since we don't use CDT pkgs during tests
