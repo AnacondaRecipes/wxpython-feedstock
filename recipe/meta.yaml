@@ -53,6 +53,7 @@ requirements:
     - {{ cdt('libsoup-devel') }}         # [linux]
     - patch     # [not win]
     - m2-patch  # [win]
+    - fontconfig
   host:
     - python
     - pthread-stubs
@@ -73,6 +74,7 @@ requirements:
     - backports.lzma  # [osx]
     - requests
     - gettext  # [not win]
+    - fontconfig
   run:
     - python
     - python.app  # [osx]
