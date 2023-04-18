@@ -14,10 +14,12 @@ source:
     - patches/0002-Don-t-enable-debug-info-for-all-builds.patch
     - patches/0003-MacOSX-Use-libc-not-libstdc.patch
 
+#https://bugzilla.redhat.com/show_bug.cgi?id=2062145
+#skip: true  # [py>=311 or s390x or aarch64 or ppc64le or osx-64 or osx-arm64 ]
 build:
-  number: 0
+  number: 1
   osx_is_app: True  # [osx]
-  skip: true  # [py>=311 or s390x or aarch64 or ppc64le or osx-64 or osx-arm64 ] https://bugzilla.redhat.com/show_bug.cgi?id=2062145
+  skip: true  # [win or py>=310 or s390x or aarch64 or ppc64le or osx-64 or osx-arm64]
   script: python setup.py install --single-version-externally-managed --record record.txt  # [win]
   missing_dso_whitelist:                                           # [osx]
     - /System/Library/Frameworks/QTKit.framework/Versions/A/QTKit  # [osx]
