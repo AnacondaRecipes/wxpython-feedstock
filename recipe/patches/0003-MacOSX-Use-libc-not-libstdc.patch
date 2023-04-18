@@ -1,0 +1,25 @@
+From 1ccd95a79df410eec29254a866d97af776ddbfd4 Mon Sep 17 00:00:00 2001
+From: Marek Waszkiewicz <mwaszkiewicz@anaconda.com>
+Date: Mon, 17 Apr 2023 16:28:14 +0200
+Subject: [PATCH 3/3] MacOSX Use libc not libstdc
+
+---
+ buildtools/config.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/buildtools/config.py b/buildtools/config.py
+index c837e5d3..d4cb267e 100644
+--- a/buildtools/config.py
++++ b/buildtools/config.py
+@@ -247,7 +247,7 @@ class Configuration(object):
+                 else:
+                     self.WXPLAT2 = '__WXOSX_COCOA__'
+ 
+-                self.libs = ['stdc++']
++                self.libs = ['c++']
+                 if not self.ARCH == "":
+                     for arch in self.ARCH.split(','):
+                         self.cflags.append("-arch")
+-- 
+2.25.1
+
