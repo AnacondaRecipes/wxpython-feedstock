@@ -1,0 +1,24 @@
+From 4106074d641977ed4a6fe43f49b6f65836914237 Mon Sep 17 00:00:00 2001
+From: Marek Waszkiewicz <mwaszkiewicz@anaconda.com>
+Date: Mon, 17 Apr 2023 16:19:34 +0200
+Subject: [PATCH 1/3] MacOSX Specify correct SDK path
+
+---
+ buildtools/build_wxwidgets.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/buildtools/build_wxwidgets.py b/buildtools/build_wxwidgets.py
+index 84cb5108..3a4474c8 100644
+--- a/buildtools/build_wxwidgets.py
++++ b/buildtools/build_wxwidgets.py
+@@ -302,6 +302,7 @@ def main(wxDir, args):
+         # TODO: Add a CLI option to set this.
+         if sys.platform.startswith("darwin"):
+             wxpy_configure_opts.append("--with-macosx-version-min=10.10")
++            wxpy_configure_opts.append("--with-macosx-sdk={}".format(os.environ.get('CONDA_BUILD_SYSROOT')))
+             # for xcodePath in getXcodePaths():
+             #     sdks = [ xcodePath+"/SDKs/MacOSX10.{}.sdk".format(n)
+             #              for n in range(9, 15) ]
+-- 
+2.25.1
+

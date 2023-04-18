@@ -1,5 +1,5 @@
 {% set name = "wxPython" %}
-{% set version = "4.0.4" %}
+{% set version = "4.1.1" %}
 
 package:
   name: {{ name|lower }}
@@ -8,17 +8,18 @@ package:
 source:
   fn: wxpython-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 0d9ef4260cb2f3e23ed9dcf6baa905ba585ac7d631613cddc299c4c83463ae29
+  sha256: 00e5e3180ac7f2852f342ad341d57c44e7e4326de0b550b9a5c4a8361b6c3528
   patches:
-    - build.py.patch  # make sure windows builds dont try to use msgfmt
-    - 0001-MacOSX-Use-libc-not-libstdc.patch
-    - 0002-MacOSX-Specify-correct-SDK-path-and-version.patch
-    - 0003-Don-t-enable-debug-info-for-all-builds.patch
-    - 0004-Use-custom-function-for-python_header-checking-on-Da.patch
-    - 0005-Anaconda-Distribution-uses-14.1-for-3.6-too.patch
+    - patches/0001-MacOSX-Specify-correct-SDK-path.patch
+    - patches/0002-Don-t-enable-debug-info-for-all-builds.patch
+    - patches/0003-MacOSX-Use-libc-not-libstdc.patch
 
+#https://bugzilla.redhat.com/show_bug.cgi?id=2062145
+#skip: true  # [py>=311 or s390x or aarch64 or ppc64le or osx-64 or osx-arm64 ]
+#skip: true  # [win or py>=310 or s390x or aarch64 or ppc64le or osx-64 or osx-arm64]
 build:
   number: 0
+  skip: true  # [py>=310]
   osx_is_app: True  # [osx]
   script: python setup.py install --single-version-externally-managed --record record.txt  # [win]
   missing_dso_whitelist:                                           # [osx]
@@ -26,9 +27,13 @@ build:
 
 requirements:
   build:
-    - pkg-config                         # [unix]
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
+    - gnuconfig                          # [unix]
+    - make                               # [unix]
+    - pkg-config                         # [unix]
+    - cmake                              # [win]
+    - ninja                              # [win]
     - {{ cdt('gtk2-devel') }}            # [linux]
     - {{ cdt('libpng-devel') }}          # [linux]
     - {{ cdt('libxrender-devel') }}      # [linux]
@@ -72,6 +77,7 @@ requirements:
     - backports.lzma  # [osx]
     - requests
     - gettext  # [not win]
+    - fontconfig
   run:
     - python
     - python.app  # [osx]
