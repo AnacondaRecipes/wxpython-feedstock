@@ -16,10 +16,11 @@ source:
 
 #https://bugzilla.redhat.com/show_bug.cgi?id=2062145
 #skip: true  # [py>=311 or s390x or aarch64 or ppc64le or osx-64 or osx-arm64 ]
+#skip: true  # [win or py>=310 or s390x or aarch64 or ppc64le or osx-64 or osx-arm64]
 build:
-  number: 1
+  number: 0
+  skip: true  # [py>=310]
   osx_is_app: True  # [osx]
-  skip: true  # [win or py>=310 or s390x or aarch64 or ppc64le or osx-64 or osx-arm64]
   script: python setup.py install --single-version-externally-managed --record record.txt  # [win]
   missing_dso_whitelist:                                           # [osx]
     - /System/Library/Frameworks/QTKit.framework/Versions/A/QTKit  # [osx]
@@ -28,6 +29,7 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
+    - gnuconfig                          # [unix]
     - make                               # [unix]
     - pkg-config                         # [unix]
     - cmake                              # [win]
@@ -55,7 +57,6 @@ requirements:
     - {{ cdt('libsoup-devel') }}         # [linux]
     - patch     # [not win]
     - m2-patch  # [win]
-    - fontconfig
   host:
     - python
     - pthread-stubs
@@ -88,7 +89,6 @@ requirements:
     # pango doesn't have a run_exports yet
     - {{ pin_compatible('pango') }}  # [linux]
     # Run exports should take care of rest
-    - fontconfig
 
 test:
   # Commenting out since we don't use CDT pkgs during tests
