@@ -7,7 +7,7 @@ package:
 
 source:
   fn: wxpython-{{ version }}.tar.gz
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: 0d9ef4260cb2f3e23ed9dcf6baa905ba585ac7d631613cddc299c4c83463ae29
   patches:
     - build.py.patch  # make sure windows builds dont try to use msgfmt
@@ -18,60 +18,72 @@ source:
     - 0005-Anaconda-Distribution-uses-14.1-for-3.6-too.patch
 
 build:
-  number: 0
-  osx_is_app: True  # [osx]
-  script: python setup.py install --single-version-externally-managed --record record.txt  # [win]
-  missing_dso_whitelist:                                           # [osx]
+  number: 2
+  osx_is_app: true  # [osx]
+  script: {{PYTHON}} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
+  missing_dso_whitelist:  # [osx]
     - /System/Library/Frameworks/QTKit.framework/Versions/A/QTKit  # [osx]
 
 requirements:
   build:
-    - pkg-config                         # [unix]
+    - pkg-config  # [unix]
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - {{ cdt('gtk2-devel') }}            # [linux]
-    - {{ cdt('libpng-devel') }}          # [linux]
-    - {{ cdt('libxrender-devel') }}      # [linux]
-    - {{ cdt('mesa-libgl-devel') }}      # [linux]
-    - {{ cdt('mesa-dri-drivers') }}      # [linux]
-    - {{ cdt('libXxf86vm-devel') }}      # [linux]
-    - {{ cdt('libselinux') }}            # [linux]
-    - {{ cdt('libdrm-devel') }}          # [linux]
-    - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
-    - {{ cdt('libxau-devel') }}          # [linux]
-    - {{ cdt('libx11-devel') }}          # [linux]
-    - {{ cdt('libxfixes-devel') }}       # [linux]
-    - {{ cdt('libxext-devel') }}         # [linux]
-    - {{ cdt('libxinerama') }}           # [linux]
-    - {{ cdt('libxi') }}                 # [linux]
-    - {{ cdt('libxcb') }}                # [linux]
-    - {{ cdt('libxcursor') }}            # [linux]
-    - {{ cdt('libxcomposite') }}         # [linux]
-    - {{ cdt('libxdamage-devel') }}      # [linux]
-    - {{ cdt('webkitgtk-devel') }}       # [linux]
-    - {{ cdt('libsoup-devel') }}         # [linux]
-    - patch     # [not win]
+    # TODO: map CDT gtk2-devel to new X11 package
+    # - { cdt('gtk2-devel') }
+    # TODO: map CDT libpng-devel to new X11 package
+    # - { cdt('libpng-devel') }
+    # TODO: map CDT libXxf86vm-devel to new X11 package
+    # - { cdt('libXxf86vm-devel') }
+    # TODO: map CDT libselinux to new X11 package
+    # - { cdt('libselinux') }
+    # TODO: map CDT libdrm-devel to new X11 package
+    # - { cdt('libdrm-devel') }
+    # TODO: map CDT libxinerama to new X11 package
+    # - { cdt('libxinerama') }
+    # TODO: map CDT libxi to new X11 package
+    # - { cdt('libxi') }
+    # TODO: map CDT libxcursor to new X11 package
+    # - { cdt('libxcursor') }
+    # TODO: map CDT libxcomposite to new X11 package
+    # - { cdt('libxcomposite') }
+    # TODO: map CDT webkitgtk-devel to new X11 package
+    # - { cdt('webkitgtk-devel') }
+    # TODO: map CDT libsoup-devel to new X11 package
+    # - { cdt('libsoup-devel') }
+    - patch  # [not win]
     - m2-patch  # [win]
   host:
     - python
     - pthread-stubs
     - setuptools
-    - glib              # [linux]
-    - xz                # [unix]
-    - expat             # [unix]
-    - zlib              # [unix]
-    - cairo             # [linux]
-    - jpeg              # [unix]
-    - pango             # [linux]
-    - libpng            # [unix]
-    - libxml2           # [linux]
-    - libiconv          # [osx]
+    - glib  # [linux]
+    - xz  # [unix]
+    - expat  # [unix]
+    - zlib  # [unix]
+    - cairo  # [linux]
+    - jpeg  # [unix]
+    - pango  # [linux]
+    - libpng  # [unix]
+    - libxml2  # [linux]
+    - libiconv  # [osx]
     - gstreamer  # [linux]
     - gst-plugins-base  # [linux]
     - libglu  # [linux]
     - backports.lzma  # [osx]
     - requests
     - gettext  # [not win]
+    - wheel
+    - xorg-libxrender
+    - libgl-devel
+    - mesa-dri-drivers
+    - xorg-xproto
+    - xorg-libxau
+    - xorg-libx11
+    - xorg-libxfixes
+    - xorg-libxext
+    - libxcb
+    - xorg-libxdamage
   run:
     - python
     - python.app  # [osx]
@@ -92,13 +104,17 @@ test:
   #commands:
   #  - conda inspect linkages -p $PREFIX wxpython  # [not win]
   #  - conda inspect objects -p $PREFIX wxpython  # [osx]
+  commands:
+    - pip check
+  requires:
+    - pip
 
 about:
   home: https://wxpython.org/Phoenix/
   license: wxWindows Library v3.1
   license_family: LGPL
   # license_file: LICENSE.txt
-  summary: Cross platform GUI toolkit for Python, "Phoenix" version
+  summary: "Cross platform GUI toolkit for Python, \"Phoenix\" version"
   description: |
     Welcome to wxPython's Project Phoenix! Phoenix is the improved next-generation
     wxPython, "better, stronger, faster than he was before." This new
