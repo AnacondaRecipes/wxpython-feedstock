@@ -31,6 +31,7 @@ requirements:
     - {{ compiler('cxx') }}
     - patch  # [not win]
     - m2-patch  # [win]
+    - {{ cdt('webkitgtk-devel') }}       # [linux]
   host:
     - python
     - pthread-stubs
@@ -68,6 +69,8 @@ requirements:
     - xorg-libxi          # [linux]
     - xorg-libxcursor     # [linux]
     - xorg-libxcomposite  # [linux]
+    # GUI toolkit packages
+    - gtk2                # [linux]
   run:
     - python
     - python.app  # [osx]

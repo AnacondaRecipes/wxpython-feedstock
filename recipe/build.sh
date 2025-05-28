@@ -60,6 +60,7 @@ if [[ $(uname) == Darwin ]]; then
   $PYTHON setup.py install --single-version-externally-managed --record record.txt  >> $BUILD_OUTPUT 2>&1
 elif [[ $(uname) == Linux ]]; then
   export CPPFLAGS="${CPPFLAGS} -I${PREFIX}/include/GL -I${PREFIX}/include"
+  export PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
   # The configure script doesn't use --rpath-link :/
   if [[ ${ARCH} == 32 ]]; then
