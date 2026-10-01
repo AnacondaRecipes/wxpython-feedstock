@@ -51,7 +51,7 @@ requirements:
     - {{ cdt('webkitgtk-devel') }}       # [linux]
     - {{ cdt('libsoup-devel') }}         # [linux]
     - patch     # [not win]
-    - m2-patch  # [win]
+    - msys2-patch  # [win]
   host:
     - python
     - pthread-stubs
